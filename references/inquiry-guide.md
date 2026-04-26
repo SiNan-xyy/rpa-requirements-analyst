@@ -1,10 +1,10 @@
 # Inquiry Guide
 
-Use this guide before generating any requirement analysis. The agent must first decide whether the request contains enough confirmed information to produce an executable RPA analysis.
+Use this guide before generating any requirement analysis. The agent must first decide whether the request contains enough confirmed information to produce an executable RPA analysis, then use `granularity-guide.md` to decide whether the operation detail is deep enough for RPA development.
 
 ## Core Principle
 
-Do not convert a vague idea into a confident requirement by guessing. If the user has not provided enough information, enter inquiry mode and ask targeted questions.
+Do not convert a vague idea into a confident requirement by guessing. If the user has not provided enough information, enter inquiry mode and ask targeted questions. Ask in stages; do not send a full questionnaire at once.
 
 ## Minimum Executable Threshold
 
@@ -33,7 +33,21 @@ Score each request from 0 to 5:
 - `4`: Enough for a draft analysis with marked assumptions.
 - `5`: Enough for implementation-oriented analysis and document-writing guidance.
 
-Use inquiry mode for scores `0` to `3`. Use full analysis for scores `4` to `5`.
+Use inquiry mode for scores `0` to `3`. Use full analysis for scores `4` to `5` only if the RPA granularity score also permits it.
+
+## Staged Inquiry Strategy
+
+At each turn:
+
+1. Identify the current layer: business intent, boundary/data, system operation, or RPA atomic actions.
+2. Reuse confirmed information; do not ask again.
+3. Ask only the next 3 to 5 questions that move the user to the next layer.
+4. Prefer choices when the user may not know how to answer.
+5. After the user answers, rescore both information sufficiency and RPA granularity.
+
+Do not ask about screenshots, selectors, waits, or retry rules until the platform/page/module is known.
+
+Do not ask about API details when the user has confirmed a browser or desktop-only workflow, unless an API alternative is being evaluated.
 
 ## Inquiry Mode Behavior
 
@@ -41,7 +55,7 @@ In inquiry mode:
 
 - Summarize only confirmed facts.
 - List blocking gaps.
-- Ask the next 3 to 7 questions.
+- Ask the next 3 to 5 questions.
 - Put the highest-risk question first.
 - Use multiple-choice options when useful.
 - Avoid asking for everything at once.
@@ -98,6 +112,12 @@ Prefer these question categories:
 Score: 2/5
 Reason: ...
 
+## RPA Granularity
+
+Score: 1/5
+Current layer: Boundary and data
+Reason: ...
+
 ## Blocking Gaps
 
 - ...
@@ -112,5 +132,5 @@ Reason: ...
 
 ## After You Confirm
 
-I can generate: feasibility judgment, process boundary, input/output/platform table, happy path, exception branches, Mermaid swimlane code, and requirement-document writing guidance.
+I can generate: feasibility judgment, process boundary, input/output/platform table, business flow, system operation flow, RPA atomic action flow, exception branches, Mermaid swimlane code, and requirement-document writing guidance.
 ```

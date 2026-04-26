@@ -3,7 +3,7 @@
   "title": "RPA Requirement Analysis",
   "type": "object",
   "additionalProperties": false,
-  "required": ["mode", "information_sufficiency"],
+  "required": ["mode", "information_sufficiency", "rpa_granularity"],
   "allOf": [
     {
       "if": {
@@ -14,7 +14,7 @@
         }
       },
       "then": {
-        "required": ["current_understanding", "inquiry_questions", "next_generation_scope"]
+        "required": ["current_understanding", "current_inquiry_layer", "inquiry_questions", "next_generation_scope"]
       }
     },
     {
@@ -33,7 +33,9 @@
           "inputs",
           "outputs",
           "platforms",
-          "happy_path",
+          "business_flow",
+          "system_operation_flow",
+          "rpa_atomic_action_flow",
           "exception_branches",
           "missing_information",
           "writing_guidance",
@@ -56,6 +58,31 @@
           "type": "integer",
           "minimum": 0,
           "maximum": 5
+        },
+        "reason": {
+          "type": "string"
+        },
+        "blocking_gaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "rpa_granularity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["score", "current_layer", "reason", "blocking_gaps"],
+      "properties": {
+        "score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "current_layer": {
+          "type": "string",
+          "enum": ["business_intent", "boundary_and_data", "system_operation", "rpa_atomic_actions", "analysis_ready"]
         },
         "reason": {
           "type": "string"
@@ -94,8 +121,12 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["question", "reason", "options"],
+        "required": ["layer", "question", "reason", "options"],
         "properties": {
+          "layer": {
+            "type": "string",
+            "enum": ["business_intent", "boundary_and_data", "system_operation", "rpa_atomic_actions"]
+          },
           "question": {
             "type": "string"
           },
@@ -116,6 +147,10 @@
       "items": {
         "type": "string"
       }
+    },
+    "current_inquiry_layer": {
+      "type": "string",
+      "enum": ["business_intent", "boundary_and_data", "system_operation", "rpa_atomic_actions"]
     },
     "requirement_one_liner": {
       "type": "string"
@@ -225,6 +260,24 @@
         "type": "string"
       }
     },
+    "business_flow": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/process_step"
+      }
+    },
+    "system_operation_flow": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/process_step"
+      }
+    },
+    "rpa_atomic_action_flow": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/process_step"
+      }
+    },
     "exception_branches": {
       "type": "array",
       "items": {
@@ -294,6 +347,29 @@
           }
         },
         "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "process_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["step", "description", "confirmed", "needs_human_confirmation"],
+      "properties": {
+        "step": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "confirmed": {
+          "type": "boolean"
+        },
+        "needs_human_confirmation": {
           "type": "array",
           "items": {
             "type": "string"

@@ -2,7 +2,7 @@
 
 Use this workflow to transform vague business experience into logic that RPA developers can discuss and implement.
 
-Before using this workflow, apply `inquiry-guide.md`. If the minimum executable threshold is not met, stay in inquiry mode.
+Before using this workflow, apply `inquiry-guide.md` and `granularity-guide.md`. If the minimum executable threshold or RPA granularity threshold is not met, stay in inquiry mode.
 
 ## 1. Define The Request
 
@@ -40,7 +40,7 @@ For every process, list:
 - Access needs: account/password, MFA, CAPTCHA, SMS code, mobile approval, permissions, VPN, IP whitelist.
 - Stability factors: planned upgrades, UI changes, slow pages, rate limits, data volume, locked files, concurrent users.
 
-## 4. Build The Happy Path
+## 4. Build Layered Flows
 
 The happy path assumes:
 
@@ -50,13 +50,19 @@ The happy path assumes:
 - Data can be found.
 - No permission, verification, or business-rule exception occurs.
 
-Write 5 to 15 action steps. Use "verb + precise qualifier" phrasing:
+Write the process in three layers:
+
+- Business flow: 3 to 8 high-level business steps.
+- System operation flow: page, module, file, API, or messaging-channel operations.
+- RPA atomic action flow: click, type, wait, read, judge, log, send, and handoff actions.
+
+Use 5 to 20 atomic action steps when the platform is UI-based. Use "verb + precise qualifier" phrasing:
 
 - Good: "Read the logistics order number from the Feishu robot message."
 - Good: "Enter the order number into the logistics interception search box."
 - Weak: "Process the order."
 
-Skip retries and exception branches in the happy path, but do not ignore them; capture them in the exception section.
+Skip retries and exception branches in the happy path, but do not ignore them; capture them in the exception section. If a business step hides multiple UI actions, expand it in the system operation flow and RPA atomic action flow.
 
 ## 5. Add Decision Branches
 
@@ -100,7 +106,9 @@ Return:
 - Feasibility judgment.
 - Process boundary.
 - Inputs/outputs/platforms table.
-- Happy path.
+- Business flow.
+- System operation flow.
+- RPA atomic action flow.
 - Exception branches.
 - Mermaid swimlane code.
 - Missing information.

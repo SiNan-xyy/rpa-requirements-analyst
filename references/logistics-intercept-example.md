@@ -19,18 +19,42 @@ When a Feishu robot receives a logistics order number, the robot opens the Yingd
 - Platforms: Feishu client/robot, browser, Yingdao Mall backend.
 - Access risks: backend login state, account/password, possible verification.
 
-## Happy Path
+## Business Flow
 
 1. Read the logistics order number from the Feishu robot conversation.
-2. Open the Yingdao Mall logistics interception page.
-3. Log in if the backend is not already logged in.
-4. Open the logistics interception function.
-5. Enter the logistics order number into the search/interception input box.
-6. Click the query button.
-7. If exactly one matching record exists, click logistics interception and confirm.
-8. Capture the interception result fields.
-9. Close the web page.
-10. Send the result message to Feishu.
+2. Search for the logistics order in the backend.
+3. Intercept the unique matching order when allowed.
+4. Send the processing result to Feishu.
+
+## System Operation Flow
+
+1. Open the Yingdao Mall logistics interception page.
+2. Log in if the backend is not already logged in.
+3. Open the logistics interception function.
+4. Enter the logistics order number into the search/interception input box.
+5. Submit the query.
+6. Read whether the query result is empty, unique, or multiple.
+7. Open the interception confirmation for the unique matching record.
+8. Read the interception result.
+9. Return to Feishu and send the result.
+
+## RPA Atomic Action Flow
+
+1. Read the logistics order number from the Feishu robot conversation.
+2. Open the browser and navigate to the backend URL.
+3. Wait for either the login page or the logistics interception page.
+4. If login is required, fill the account field, fill the password field, and click the login button.
+5. Wait for the workbench navigation area.
+6. Click the logistics interception navigation entry.
+7. Wait for the interception input box.
+8. Type the logistics order number into the interception input box.
+9. Click the query button.
+10. Wait for the result list, no-result message, timeout, or verification challenge.
+11. Judge whether the result is empty, unique, or multiple.
+12. If exactly one record exists, click the logistics interception button and confirm.
+13. Read order number, order identifier, order amount, order time, current status, and processing result when available.
+14. Close the web page.
+15. Compose and send the Feishu success or failure message.
 
 ## Exception Branches
 
