@@ -2,13 +2,17 @@
 
 Use this workflow to transform vague business experience into logic that RPA developers can discuss and implement.
 
+Before using this workflow, apply `inquiry-guide.md`. If the minimum executable threshold is not met, stay in inquiry mode.
+
 ## 1. Define The Request
 
-Create a one-sentence definition:
+Create a one-sentence definition only after the trigger, input, target platform, business action, output, and destination are known or explicitly accepted as assumptions:
 
 `When [trigger], the robot should use [input] on [platform/system] to complete [business action], then produce [output/result].`
 
 Keep the sentence concrete. Avoid phrases like "process data", "handle exceptions", or "sync information" without specifying which data, which exception, and which target.
+
+If the information is incomplete, do not create this sentence. Ask questions instead.
 
 ## 2. Find Start And End Boundaries
 
