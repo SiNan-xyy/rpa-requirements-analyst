@@ -6,11 +6,14 @@ Use this guide to avoid producing a business-level process that looks complete b
 
 An RPA process is not development-ready just because the business loop is closed. A phrase like "query the order" often contains many browser or desktop actions: open page, locate input, fill field, click button, wait for result, handle verification, read result area, judge no-result or multi-result cases, and write or send output.
 
-Always distinguish three layers:
+Always distinguish three layers and source confidence:
 
 - Business flow: what the business wants to accomplish.
 - System operation flow: which systems, pages, modules, and fields are involved.
 - RPA atomic action flow: what the robot clicks, types, waits for, reads, judges, logs, and sends.
+- Source confidence: whether each step is confirmed by the user, confirmed by an artifact, inferred, or still needs confirmation.
+
+Read `source-confidence-guide.md` before marking UI actions as confirmed.
 
 ## Staged Inquiry Layers
 
@@ -65,6 +68,7 @@ Goal: confirm what the robot does step by step.
 Ask about:
 
 - Exact input fields, buttons, tabs, filters, and result areas.
+- Navigation path between pages or modules.
 - Wait condition after each click or submit.
 - Data extraction fields.
 - Judgment rules, such as unique result, no result, multiple result, timeout, or stale update.
@@ -80,14 +84,16 @@ Score the request from 0 to 5:
 - `1`: Involved systems are known, but operation path is unknown.
 - `2`: Page or module level operation is known, but specific actions are missing.
 - `3`: Main click, fill, read, and send actions are known, but waits, judgments, and exceptions are incomplete.
-- `4`: Atomic actions, waits, judgments, outputs, and common exceptions are mostly clear; screenshots and exact selectors may still need human confirmation.
-- `5`: Atomic actions, page elements, screenshots, field names, waits, exceptions, logs, notifications, and human handoff rules are all confirmed.
+- `4`: Atomic actions, waits, judgments, outputs, common exceptions, and source status are mostly clear; screenshots and exact selectors may still need human confirmation.
+- `5`: Atomic actions, page elements, screenshots, field names, waits, exceptions, logs, notifications, human handoff rules, and source evidence are all confirmed.
 
 Use inquiry mode for scores `0` to `2`.
 
 For score `3`, generate only a draft analysis if the information sufficiency score is at least `4`; mark page details and exception rules as pending.
 
 For scores `4` to `5`, generate a full analysis with layered flows.
+
+If many UI actions are inferred rather than confirmed, keep the granularity score at `3` or below even if the action list is detailed.
 
 ## Layered Output Rules
 
@@ -113,7 +119,7 @@ Use page/module-level steps. Example:
 
 ### RPA Atomic Action Flow
 
-Use robot-level actions. Example:
+Use robot-level actions only for confirmed actions. Put inferred UI actions into candidate operation paths. Example:
 
 - Open browser and navigate to the query URL.
 - Wait for the query input box to appear.
@@ -128,6 +134,13 @@ Use robot-level actions. Example:
 - Send the reply to the Feishu conversation.
 - Write processing log.
 
+Each step must include:
+
+- Description.
+- Source status.
+- Evidence or source note.
+- Human confirmation needed, if any.
+
 ## Anti-Patterns
 
 Avoid these outputs:
@@ -137,3 +150,4 @@ Avoid these outputs:
 - "Handle exception" without condition, robot action, log, notification, and handoff.
 - "Reply result" without recipient, channel, and message template.
 - "Open system" without login and verification assumptions.
+- "Click into query page" without confirming direct URL, homepage entry, menu path, popup, or current-page expansion.

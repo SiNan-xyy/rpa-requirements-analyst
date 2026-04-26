@@ -1,6 +1,6 @@
 ---
 name: rpa-requirements-analyst
-description: Analyze early-stage RPA automation ideas by first entering a staged inquiry phase, asking only the next few clarification questions needed to advance from business intent to boundary/data details, system operations, and RPA atomic actions, then turning the confirmed request into feasibility judgment, process boundaries, layered operation breakdown, exception branches, Mermaid swimlane diagrams, missing-information notes, and guidance for humans writing the final RPA requirement document. Use when users ask to assess, clarify, decompose, diagram, or prepare an RPA requirement before formal documentation. Do not guess a requirement one-liner from insufficient information, flatten multi-click UI work into one vague action, directly fill Word templates, insert screenshots, or operate business/RPA platforms.
+description: Analyze early-stage RPA automation ideas by first entering a staged inquiry phase, asking only the next few clarification questions needed to advance from business intent to boundary/data details, system operations, and RPA atomic actions, then turning the confirmed request into feasibility judgment, process boundaries, source-labeled layered operation breakdown, exception branches, Mermaid swimlane diagrams, missing-information notes, and guidance for humans writing the final RPA requirement document. Use when users ask to assess, clarify, decompose, diagram, or prepare an RPA requirement before formal documentation. Do not guess a requirement one-liner from insufficient information, flatten multi-click UI work into one vague action, treat inferred UI actions as confirmed, directly fill Word templates, insert screenshots, or operate business/RPA platforms.
 ---
 
 # RPA Requirements Analyst
@@ -14,6 +14,8 @@ Do not promise to complete the final requirement document. Screenshots, page-ele
 Default to inquiry before generation. When information is insufficient, ask targeted questions instead of producing a requirement definition, happy path, feasibility conclusion, or diagram.
 
 Drive the conversation in stages. Do not ask every possible question at once. At each turn, identify the current maturity layer and ask only the next 3 to 5 questions that move the request to the next layer.
+
+Treat source confidence as a hard gate. A detailed action is not development-ready unless its source is confirmed by the user or by an artifact such as a screenshot, document, page observation, or API documentation.
 
 ## Operating Boundary
 
@@ -41,15 +43,16 @@ Do not perform:
 1. Parse the user's business description.
 2. Run the information sufficiency gate in `references/inquiry-guide.md`.
 3. Run the operation granularity gate in `references/granularity-guide.md`.
-4. If the request is below the next maturity threshold, enter inquiry mode. Ask only the next 3 to 5 high-value questions for the current layer, using multiple-choice options when choices are predictable. Do not generate the default analysis package.
-5. After each user answer, update known facts, assumptions, unresolved gaps, information sufficiency score, and RPA granularity score. Continue inquiry until the minimum threshold is met or the user explicitly asks for a rough draft.
-6. Only after the threshold is met, evaluate RPA feasibility using `references/feasibility-checklist.md`.
-7. Extract process boundaries using `references/workflow.md`.
-8. Decompose the process into business flow, system operation flow, and RPA atomic actions. Prefer "verb + precise qualifier" phrasing.
-9. Identify exception branches, including no data, multiple data, login failure, permission failure, verification-code intervention, network/system failure, retry limit, logging, notification, and manual handling.
-10. Generate a Mermaid swimlane diagram when the user asks for a diagram or when the process has multiple roles/systems. Follow `references/mermaid-swimlane-guide.md`.
-11. Produce requirement-document writing guidance using `references/requirement-writing-guide.md`.
-12. If a structured artifact is requested, output JSON compatible with `schemas/rpa_requirement_analysis.schema.json`.
+4. Run the source confidence gate in `references/source-confidence-guide.md`.
+5. If the request is below the next maturity threshold, enter inquiry mode. Ask only the next 3 to 5 high-value questions for the current layer, using multiple-choice options when choices are predictable. Do not generate the default analysis package.
+6. After each user answer, update known facts, assumptions, unresolved gaps, information sufficiency score, RPA granularity score, and source confidence notes. Continue inquiry until the minimum threshold is met or the user explicitly asks for a rough draft.
+7. Only after the threshold is met, evaluate RPA feasibility using `references/feasibility-checklist.md`.
+8. Extract process boundaries using `references/workflow.md`.
+9. Decompose the process into business flow, system operation flow, and RPA atomic actions. Prefer "verb + precise qualifier" phrasing and label every step with its source status.
+10. Identify exception branches, including no data, multiple data, login failure, permission failure, verification-code intervention, network/system failure, retry limit, logging, notification, and manual handling.
+11. Generate a Mermaid swimlane diagram when the user asks for a diagram or when the process has multiple roles/systems. Follow `references/mermaid-swimlane-guide.md`.
+12. Produce requirement-document writing guidance using `references/requirement-writing-guide.md`.
+13. If a structured artifact is requested, output JSON compatible with `schemas/rpa_requirement_analysis.schema.json`.
 
 ## Inquiry Mode Output
 
@@ -79,8 +82,9 @@ Use this structure unless the user requests another format:
 8. Exception branches
 9. Mermaid swimlane diagram
 10. Missing information
-11. Requirement document writing guidance
-12. Human confirmation checklist
+11. Candidate operation paths that require confirmation
+12. Requirement document writing guidance
+13. Human confirmation checklist
 
 ## Quality Rules
 
@@ -93,6 +97,9 @@ Use this structure unless the user requests another format:
 - Use multiple-choice questions when the user may not know how to phrase the answer, but include a free-text option.
 - Do not collapse multi-step UI work into vague actions such as "query the order" or "process the data". Expand them into page/module/action/wait/read/judge steps when enough information exists.
 - If a step happens in a browser or desktop client, ask for page/module/field/button/result-area details before calling it development-ready.
+- Every business flow, system operation flow, and RPA atomic action step must include a source status: `confirmed_by_user`, `confirmed_by_artifact`, `inferred`, or `needs_confirmation`.
+- Do not place `inferred` or `needs_confirmation` UI actions in the development-ready atomic action flow. Put them in candidate operation paths and convert them into inquiry questions.
+- If the path from one page/module to another is unknown, ask how navigation happens instead of writing a guessed click path.
 - Mark each risk as `low`, `medium`, or `high`.
 - When platform details are unknown, say what must be checked instead of inventing UI steps.
 - For every decision branch, include both success and failure handling.
@@ -105,6 +112,7 @@ Use this structure unless the user requests another format:
 - Read `references/workflow.md` for the main RPA requirement analysis procedure.
 - Read `references/inquiry-guide.md` before deciding whether to ask questions or generate analysis.
 - Read `references/granularity-guide.md` before deciding whether the process is detailed enough for RPA development.
+- Read `references/source-confidence-guide.md` before marking any UI or platform action as confirmed.
 - Read `references/feasibility-checklist.md` when judging whether an automation idea is suitable for RPA.
 - Read `references/mermaid-swimlane-guide.md` before generating Mermaid swimlane code.
 - Read `references/requirement-writing-guide.md` before producing final writing guidance for a human document owner.

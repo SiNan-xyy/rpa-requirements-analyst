@@ -1,6 +1,6 @@
 # Inquiry Guide
 
-Use this guide before generating any requirement analysis. The agent must first decide whether the request contains enough confirmed information to produce an executable RPA analysis, then use `granularity-guide.md` to decide whether the operation detail is deep enough for RPA development.
+Use this guide before generating any requirement analysis. The agent must first decide whether the request contains enough confirmed information to produce an executable RPA analysis, then use `granularity-guide.md` to decide whether the operation detail is deep enough for RPA development, and `source-confidence-guide.md` to decide whether detailed steps are confirmed or only guessed.
 
 ## Core Principle
 
@@ -44,10 +44,18 @@ At each turn:
 3. Ask only the next 3 to 5 questions that move the user to the next layer.
 4. Prefer choices when the user may not know how to answer.
 5. After the user answers, rescore both information sufficiency and RPA granularity.
+6. If any detailed UI path is inferred, ask a source-confirmation question before treating it as development-ready.
 
 Do not ask about screenshots, selectors, waits, or retry rules until the platform/page/module is known.
 
 Do not ask about API details when the user has confirmed a browser or desktop-only workflow, unless an API alternative is being evaluated.
+
+When the user confirms browser or desktop-client automation, ask navigation confirmation before generating atomic click paths:
+
+- Is the target page opened by direct URL, homepage entry, logged-in workbench menu, popup, or current-page search area?
+- What is the exact entry/menu/button name?
+- What page state appears after clicking?
+- Can the user provide screenshots or page annotations?
 
 ## Inquiry Mode Behavior
 
@@ -117,6 +125,12 @@ Reason: ...
 Score: 1/5
 Current layer: Boundary and data
 Reason: ...
+
+## Source Confidence
+
+- Confirmed actions: ...
+- Candidate or inferred actions: ...
+- UI actions requiring confirmation: ...
 
 ## Blocking Gaps
 

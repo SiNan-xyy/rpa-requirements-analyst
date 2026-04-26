@@ -36,6 +36,7 @@
           "business_flow",
           "system_operation_flow",
           "rpa_atomic_action_flow",
+          "candidate_operation_paths",
           "exception_branches",
           "missing_information",
           "writing_guidance",
@@ -278,6 +279,33 @@
         "$ref": "#/$defs/process_step"
       }
     },
+    "candidate_operation_paths": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["description", "source_status", "cannot_be_used_as_development_step", "confirmation_questions"],
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "source_status": {
+            "type": "string",
+            "enum": ["inferred", "needs_confirmation"]
+          },
+          "cannot_be_used_as_development_step": {
+            "type": "boolean",
+            "const": true
+          },
+          "confirmation_questions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "exception_branches": {
       "type": "array",
       "items": {
@@ -357,7 +385,14 @@
     "process_step": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["step", "description", "confirmed", "needs_human_confirmation"],
+      "required": [
+        "step",
+        "description",
+        "source_status",
+        "source_note",
+        "development_ready",
+        "needs_human_confirmation"
+      ],
       "properties": {
         "step": {
           "type": "integer",
@@ -366,7 +401,14 @@
         "description": {
           "type": "string"
         },
-        "confirmed": {
+        "source_status": {
+          "type": "string",
+          "enum": ["confirmed_by_user", "confirmed_by_artifact", "inferred", "needs_confirmation"]
+        },
+        "source_note": {
+          "type": "string"
+        },
+        "development_ready": {
           "type": "boolean"
         },
         "needs_human_confirmation": {

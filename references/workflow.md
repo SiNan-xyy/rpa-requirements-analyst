@@ -2,7 +2,7 @@
 
 Use this workflow to transform vague business experience into logic that RPA developers can discuss and implement.
 
-Before using this workflow, apply `inquiry-guide.md` and `granularity-guide.md`. If the minimum executable threshold or RPA granularity threshold is not met, stay in inquiry mode.
+Before using this workflow, apply `inquiry-guide.md`, `granularity-guide.md`, and `source-confidence-guide.md`. If the minimum executable threshold, RPA granularity threshold, or source confidence threshold is not met, stay in inquiry mode.
 
 ## 1. Define The Request
 
@@ -54,15 +54,16 @@ Write the process in three layers:
 
 - Business flow: 3 to 8 high-level business steps.
 - System operation flow: page, module, file, API, or messaging-channel operations.
-- RPA atomic action flow: click, type, wait, read, judge, log, send, and handoff actions.
+- RPA atomic action flow: confirmed click, type, wait, read, judge, log, send, and handoff actions.
+- Candidate operation paths: likely but unconfirmed UI paths that must not be treated as development-ready.
 
-Use 5 to 20 atomic action steps when the platform is UI-based. Use "verb + precise qualifier" phrasing:
+Use 5 to 20 atomic action steps when the platform is UI-based and the actions are source-confirmed. Use "verb + precise qualifier" phrasing:
 
 - Good: "Read the logistics order number from the Feishu robot message."
 - Good: "Enter the order number into the logistics interception search box."
 - Weak: "Process the order."
 
-Skip retries and exception branches in the happy path, but do not ignore them; capture them in the exception section. If a business step hides multiple UI actions, expand it in the system operation flow and RPA atomic action flow.
+Skip retries and exception branches in the happy path, but do not ignore them; capture them in the exception section. If a business step hides multiple UI actions, expand it in the system operation flow and RPA atomic action flow only when the UI path is confirmed. If not confirmed, put it in candidate operation paths and ask follow-up questions.
 
 ## 5. Add Decision Branches
 
@@ -109,6 +110,7 @@ Return:
 - Business flow.
 - System operation flow.
 - RPA atomic action flow.
+- Candidate operation paths requiring confirmation.
 - Exception branches.
 - Mermaid swimlane code.
 - Missing information.

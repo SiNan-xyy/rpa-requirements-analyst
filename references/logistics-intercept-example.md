@@ -40,21 +40,44 @@ When a Feishu robot receives a logistics order number, the robot opens the Yingd
 
 ## RPA Atomic Action Flow
 
+Use source status for every step:
+
 1. Read the logistics order number from the Feishu robot conversation.
+   - Source status: confirmed_by_user
+   - Evidence: training example states that Feishu provides the logistics number.
 2. Open the browser and navigate to the backend URL.
+   - Source status: confirmed_by_artifact
+   - Evidence: example template includes the backend URL.
 3. Wait for either the login page or the logistics interception page.
-4. If login is required, fill the account field, fill the password field, and click the login button.
-5. Wait for the workbench navigation area.
-6. Click the logistics interception navigation entry.
-7. Wait for the interception input box.
-8. Type the logistics order number into the interception input box.
-9. Click the query button.
-10. Wait for the result list, no-result message, timeout, or verification challenge.
-11. Judge whether the result is empty, unique, or multiple.
-12. If exactly one record exists, click the logistics interception button and confirm.
-13. Read order number, order identifier, order amount, order time, current status, and processing result when available.
-14. Close the web page.
-15. Compose and send the Feishu success or failure message.
+   - Source status: inferred
+   - Do not treat as development-ready until screenshots or page observation confirm both states.
+4. Fill account and password, then click the login button if login is required.
+   - Source status: confirmed_by_artifact
+   - Evidence: example template lists login fields and button.
+5. Click the logistics interception navigation entry.
+   - Source status: confirmed_by_artifact
+   - Evidence: example template names the navigation entry.
+6. Type the logistics order number into the interception input box.
+   - Source status: confirmed_by_artifact
+   - Evidence: example template names the input box.
+7. Click the query button.
+   - Source status: confirmed_by_artifact
+   - Evidence: example template names the query action.
+8. Judge whether the result is empty, unique, or multiple.
+   - Source status: confirmed_by_artifact
+   - Evidence: example template includes no-result, unique-result, and multiple-result screenshots.
+9. If exactly one record exists, click the logistics interception button and confirm.
+   - Source status: confirmed_by_artifact
+   - Evidence: example template describes interception confirmation.
+10. Read order number, order identifier, order amount, order time, current status, and processing result when available.
+    - Source status: confirmed_by_artifact
+    - Evidence: example template lists these fields.
+11. Close the web page.
+    - Source status: confirmed_by_user
+    - Evidence: training example includes exit web page.
+12. Compose and send the Feishu success or failure message.
+    - Source status: confirmed_by_user
+    - Evidence: training example includes sending the result to Feishu.
 
 ## Exception Branches
 
