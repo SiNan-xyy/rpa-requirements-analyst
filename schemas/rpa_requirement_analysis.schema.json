@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RPA Requirement Analysis",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "requirement_one_liner",
+    "feasibility",
+    "boundaries",
+    "inputs",
+    "outputs",
+    "platforms",
+    "happy_path",
+    "exception_branches",
+    "missing_information",
+    "writing_guidance",
+    "human_confirmation_checklist"
+  ],
+  "properties": {
+    "requirement_one_liner": {
+      "type": "string"
+    },
+    "feasibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "rationale", "risks", "minimum_proof"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["suitable", "conditionally_suitable", "not_currently_suitable"]
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "risks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["level", "description", "mitigation"],
+            "properties": {
+              "level": {
+                "type": "string",
+                "enum": ["low", "medium", "high"]
+              },
+              "description": {
+                "type": "string"
+              },
+              "mitigation": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "minimum_proof": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_trigger", "start_condition", "end_marker", "stop_condition"],
+      "properties": {
+        "start_trigger": {
+          "type": "string"
+        },
+        "start_condition": {
+          "type": "string"
+        },
+        "end_marker": {
+          "type": "string"
+        },
+        "stop_condition": {
+          "type": "string"
+        }
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/data_item"
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/data_item"
+      }
+    },
+    "platforms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "type", "access_needs", "stability_notes"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "access_needs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stability_notes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "happy_path": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "exception_branches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["condition", "success_path", "failure_path", "log_or_notification", "human_handoff"],
+        "properties": {
+          "condition": {
+            "type": "string"
+          },
+          "success_path": {
+            "type": "string"
+          },
+          "failure_path": {
+            "type": "string"
+          },
+          "log_or_notification": {
+            "type": "string"
+          },
+          "human_handoff": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "mermaid": {
+      "type": "string"
+    },
+    "missing_information": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "writing_guidance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "human_confirmation_checklist": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "data_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "source_or_destination", "format", "required_fields", "notes"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "source_or_destination": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string"
+        },
+        "required_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
